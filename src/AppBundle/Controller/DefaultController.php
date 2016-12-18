@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\MoneyType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 
 use AppBundle\Entity\Games;
 
@@ -28,7 +28,6 @@ class DefaultController extends Controller
 	$games->setDescription('First AAA game');
 
 	$em = $this->getDoctrine()->getManager();
-
 	$em->persist($games);
 	$em->flush();
 
@@ -51,27 +50,39 @@ class DefaultController extends Controller
 	}
 
      /**
-      * @Route("/{gameId}", name="games_show")
+      * @Route("/{gameId}", name="game_edit")
       */
-    public function showAction($gameId)
+    public function editAction(Request $request, $gameId)
     {
-	$games = $this->getDoctrine()
+	$game = $this->getDoctrine()
 		->getRepository('AppBundle:Games')
 		->find($gameId);
 
-	if (!$games) {
+	if (!$game) {
 	    throw $this->createNotFoundException(
 		'No game found for id'.$gameId
 	);
 	}
 
-	$form = $this->createFormBuilder($games)
+	$form = $this->createFormBuilder($game)
 		->add('name', TextType::class)
 		->add('description', TextType::class)
-		->add('price', MoneyType::class)
+		->add('price', NumberType::class)
+        ->add('save', SubmitType::class, array('label' => 'Save Item'))
 		->getForm();
 
-	return $this->render('default/new.html.twig', array(
+
+    $form->handleRequest($request);
+
+    if($form->isSubmitted()) {
+       $em = $this->getDoctrine()->getManager();
+       $em ->persist($game);
+       $em->flush();
+
+       return $this->redirectToRooute('games_index');
+    }
+
+	return $this->render('default/add.html.twig', array(
 		'form' => $form->createView(),
 		));
     }

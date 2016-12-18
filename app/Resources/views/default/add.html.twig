@@ -3,26 +3,14 @@
 {% block body %}
     <div id="wrapper">
         <div id="container">
-	<table>
-		<thead>
-		<tr>
-			<th>Name</th>
-			<th>Description</th>
-			<th>Price</th>
-            <th>Actions<th>
-		</tr>
-		</thead>
-		<tbody>
-		{% for game in games %}
-		<tr>
-		<td>{{ game.name }}</td>
-		<td>{{ game.description }}</td>
-		<td>{{ game.price }} </td>
-        <td><a href="{{ path('games_show', {'gameId': game.id}) }}">Show</a></td>
-		</tr>
-		{% endfor %}
-		</tbody>
-	</table>
+    
+    <a href="{{ path('games_index')}}">Back to list</a>        
+        <div class="form_row">
+            {{ form_label(form) }}
+            {{ form_errors(form) }}
+            {{ form_widget(form) }}
+        </div>	    
+
         </div>
     </div>
 {% endblock %}
