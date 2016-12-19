@@ -3,13 +3,34 @@
 {% block body %}
     <div id="wrapper">
         <div id="container">
-    
-    <a href="{{ path('games_index')}}">Back to list</a>        
-        <div class="form_row">
-            {{ form_errors(form) }}
-            {{ form_widget(form) }}
-        </div>	    
+    <a href="{{ path('games_index') }}">Back to list</a>
 
+    <table>
+        <thead align="left">
+            <tr>
+                <th width="30%">Field</th>
+                <th>Value</th>         
+            </tr>
+        </thead>
+        <tbody align="left">
+            <tr>
+                <th width="30%">Name: </th>
+                <th>{{ game.name }}</th>
+            </tr>
+            <tr>
+                <th width="30%">Description: </th>
+                <th>{{ game.description }}</th>
+            </tr>
+            <tr>
+                <th width="30%">Price: </th>
+                <th>{{ game.price }}</th>
+            </tr>
+        </tbody>        
+    </table>
+
+    <p>If you wish remove game from list, push button</p>    
+    <div></div>
+		
         </div>
     </div>
 {% endblock %}

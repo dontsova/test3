@@ -50,7 +50,7 @@ class DefaultController extends Controller
 	}
 
      /**
-      * @Route("/{gameId}", name="game_edit")
+      * @Route("/edit/{gameId}", name="game_edit")
       */
     public function editAction(Request $request, $gameId)
     {
@@ -79,12 +79,50 @@ class DefaultController extends Controller
        $em ->persist($game);
        $em->flush();
 
-       return $this->redirectToRooute('games_index');
+       return $this->redirectToRoute('games_index');
     }
 
-	return $this->render('default/add.html.twig', array(
+	return $this->render('default/edit.html.twig', array(
 		'form' => $form->createView(),
 		));
+    }
+
+    /**
+     * @Route("/add", name="game_add")
+     */
+    public function addAction()
+    {
+    $form = $this->createFormBuilder()
+            ->add('name', TextType::class)
+            ->add('description', TextType::class)
+            ->add('price', NumberType::class)
+            ->add('add', SubmitType::class, array('label' => 'Add New Item'))
+            ->getForm();
+
+    return $this->render('default/add.html.twig');
+    }
+
+
+
+    /**
+     * @Route("/remove/{gameId}", name="game_remove")
+     */
+    public function removeAction($gameId)
+    {
+        $game = $this->getDoctrine()
+            ->getRepository('AppBundle:Games')
+            ->find($gameId);
+
+        if(!$game) {
+            throw $this->createNotFoundException(
+            'No game found for id: '.$gameId
+        );
+        }
+
+        return $this->render('default/remove.html.twig', array(
+                'game' => $game, 
+                ));
+
     }
 
 
