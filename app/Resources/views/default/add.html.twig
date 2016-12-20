@@ -5,10 +5,9 @@
         <div id="container">
     
     <a href="{{ path('games_index')}}">Back to list</a>        
-        <div class="form_row">
-            {{ form_errors(form) }}
-            {{ form_widget(form) }}
-        </div>	    
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+        {{ form_end(form) }}	    
 
         </div>
     </div>

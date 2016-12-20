@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+
 /**
 * @ORM\Entity
 * @ORM\Table(name="games")
@@ -20,17 +21,17 @@ class Games
 	/**
 	 * @ORM\Column(type="string", length=100)
 	 */
-	private $name;
+    private $name;
 
 	/**
 	 * @ORM\Column(type="decimal", scale=2)
 	 */
-	private $price;
+    private $price;
 
 	/**
 	 * @ORM\Column(type="text")
 	 */
-	private $description;
+    private $description;
 
 	/**
 	 * @ORM\Column(type="string")

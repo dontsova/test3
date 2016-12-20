@@ -17,24 +17,6 @@ use AppBundle\Entity\Games;
  */
 class DefaultController extends Controller
 {
-    /**
-     * @Route("/dbcreate")
-     */
-    public function createAction()
-    {
-	$games = new Games();
-	$games->setName('Tetris');
-	$games->setPrice(19.99);
-	$games->setDescription('First AAA game');
-
-	$em = $this->getDoctrine()->getManager();
-	$em->persist($games);
-	$em->flush();
-
-	return new Response('Saved new product with id: ' .$games->getId());
-    }
-
-
      /**
       * @Route("/index", name="games_index")
       */
@@ -75,8 +57,10 @@ class DefaultController extends Controller
     $form->handleRequest($request);
 
     if($form->isSubmitted()) {
+
+       $game = $form->getData();
        $em = $this->getDoctrine()->getManager();
-       $em ->persist($game);
+       $em->persist($game);
        $em->flush();
 
        return $this->redirectToRoute('games_index');
@@ -90,16 +74,34 @@ class DefaultController extends Controller
     /**
      * @Route("/add", name="game_add")
      */
-    public function addAction()
+    public function addAction(Request $request)
     {
-    $form = $this->createFormBuilder()
+    $game = new Games();
+    $game->setImageuri("set later");
+    $game->setQuantity(50);
+
+    $form = $this->createFormBuilder($game)
             ->add('name', TextType::class)
             ->add('description', TextType::class)
             ->add('price', NumberType::class)
             ->add('add', SubmitType::class, array('label' => 'Add New Item'))
             ->getForm();
 
-    return $this->render('default/add.html.twig');
+    $form->handleRequest($request);
+
+    if($form->isSubmitted()) {
+       $game = $form->getData();
+
+       $em = $this->getDoctrine()->getManager();
+       $em->persist($game);
+       $em->flush();
+
+       return $this->redirectToRoute('games_index');
+    }
+
+    return $this->render('default/add.html.twig', array(
+        'form' => $form->createView(),
+        ));
     }
 
 
@@ -107,44 +109,38 @@ class DefaultController extends Controller
     /**
      * @Route("/remove/{gameId}", name="game_remove")
      */
-    public function removeAction($gameId)
+    public function removeAction(Request $request, $gameId)
     {
-        $game = $this->getDoctrine()
-            ->getRepository('AppBundle:Games')
-            ->find($gameId);
+    $game = $this->getDoctrine()
+          ->getRepository('AppBundle:Games')
+          ->find($gameId);
 
-        if(!$game) {
-            throw $this->createNotFoundException(
-            'No game found for id: '.$gameId
+    if(!$game) {
+          throw $this->createNotFoundException(
+          'No game found for id: '.$gameId
         );
         }
 
-        return $this->render('default/remove.html.twig', array(
-                'game' => $game, 
-                ));
+    $form = $this->createFormBuilder($game)
+            ->add('remove', SubmitType::class, array('label' => 'Remove Game'))
+            ->getForm();
 
+    $form->handleRequest($request);
+
+    if($form->isSubmitted()) {
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($game);
+        $em->flush();
+
+        return $this->redirectToRoute('games_index');
     }
 
 
-	/**
-	 * @Route("/update/{gameId}")
-	 */
-    public function updateAction($gameId)
-    {
-	$em = $this->getDoctrine()->getManager();
-	$games = $em->getRepository('AppBundle:Games')->find($gameId);
 
-	if(!$games) {
-	   throw $this->createNotFoundException(
-		'No game found for id ' .$gameId
-		);
-	}
-
-	$games->setName('Doom');
-	$games->setPrice(49.00);
-	$em->flush();
-
-	return $this->redirectToRoute('showgamebyid');
+    return $this->render('default/remove.html.twig', array(
+                'game' => $game,
+                'form' => $form->createView(),
+                ));
     }
 
 }

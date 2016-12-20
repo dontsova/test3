@@ -29,7 +29,11 @@
     </table>
 
     <p>If you wish remove game from list, push button</p>    
-    <div></div>
+    <div>
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+        {{ form_end(form) }}
+    </div>
 		
         </div>
     </div>

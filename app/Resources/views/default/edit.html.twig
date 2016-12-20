@@ -4,12 +4,10 @@
     <div id="wrapper">
         <div id="container">
     
-    <a href="{{ path('games_index')}}">Back to list</a>        
-        <div class="form_row">
-            {{ form_label(form) }}
-            {{ form_errors(form) }}
+            <a href="{{ path('games_index')}}">Back to list</a>        
+            {{ form_start(form) }}
             {{ form_widget(form) }}
-        </div>	    
+            {{ form_end(form) }}
 
         </div>
     </div>
