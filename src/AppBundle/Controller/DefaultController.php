@@ -56,7 +56,7 @@ class DefaultController extends Controller
 
     $form->handleRequest($request);
 
-    if($form->isSubmitted()) {
+    if($form->isValid() && $form->isSubmitted()) {
 
        $game = $form->getData();
        $em = $this->getDoctrine()->getManager();
@@ -89,7 +89,7 @@ class DefaultController extends Controller
 
     $form->handleRequest($request);
 
-    if($form->isSubmitted()) {
+    if($form->isValid() && $form->isSubmitted()) {
        $game = $form->getData();
 
        $em = $this->getDoctrine()->getManager();
@@ -127,7 +127,7 @@ class DefaultController extends Controller
 
     $form->handleRequest($request);
 
-    if($form->isSubmitted()) {
+    if($form->isValid() && $form->isSubmitted()) {
         $em = $this->getDoctrine()->getManager();
         $em->remove($game);
         $em->flush();

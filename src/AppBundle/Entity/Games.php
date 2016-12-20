@@ -3,7 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
 * @ORM\Entity
@@ -20,26 +20,31 @@ class Games
 
 	/**
 	 * @ORM\Column(type="string", length=100)
+     * @Assert\NotBlank()
 	 */
     private $name;
 
 	/**
 	 * @ORM\Column(type="decimal", scale=2)
+     * @Assert\NotBlank()
 	 */
     private $price;
 
 	/**
 	 * @ORM\Column(type="text")
+     * @Assert\NotBlank()
 	 */
     private $description;
 
 	/**
 	 * @ORM\Column(type="string")
+     * @Assert\NotBlank()
 	 */
 	private $imageuri;
 
 	/**
 	 * @ORM\Column(type="integer"))
+     * @Assert\NotBlank()
 	 */
 	private $quantity;
 
